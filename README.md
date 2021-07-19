@@ -1,0 +1,2 @@
+# Update-DuckDNS
+Update-DuckDNS
