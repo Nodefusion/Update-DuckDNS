@@ -16,7 +16,7 @@ Run this PowerShell to create folder and download latest stable Update-DuckDNS
 #Requires -RunAsAdministrator
 #Requires -Version 7
 
-New-Ttem -ItemType Directory $Env:Programfiles\Update-DuckDNS
+New-Item -ItemType Directory "$Env:Programfiles\Update-DuckDNS"
 
 Invoke-WebRequest https://raw.githubusercontent.com/Nodefusion/Update-DuckDNS/main/Update-DuckDNS.psm1 -OutFile $Env:Programfiles\Update-DuckDNS\Update-DuckDNS.psm1
 ```
@@ -36,7 +36,7 @@ $timeSpan = New-TimeSpan -Minutes 15
 $workingDirectory = $Env:Programfiles+'\Update-DuckDNS'
 $execute = (Get-Command -Name pwsh).Path
 
-$action = New-ScheduledTaskAction -Execute $execute -Argument (-join('-NonInteractive -NoLogo -NoProfile -WorkingDirectory "', $workingDirectory, '" -Command "Import-Module -Force -Name ./ && Update-DuckDNS -DetectIPv6 $true"'))
+$action = New-ScheduledTaskAction -Execute $execute -Argument (-join('-NonInteractive -NoLogo -NoProfile -WorkingDirectory "', $workingDirectory, '" -Command "Import-Module -Force -Name ./ && Update-DuckDNS"'))
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval $timespan
 $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RunOnlyIfNetworkAvailable -DontStopOnIdleEnd -MultipleInstances IgnoreNew
@@ -51,7 +51,7 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Principal $principal -
 Load module
 
 ```powershell
-Import-Module $Env:Programfiles+'\Update-DuckDNS' 
+Import-Module "$Env:Programfiles\Update-DuckDNS"
 ```
 
 Simple IP update for given domain name parameter
